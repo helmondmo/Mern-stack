@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Pharmacist</title>
+</head>
+<body>
+    <h1 class="title">Find a Pharmacist : A rest API </h1>
+    <div id="homepage">
+        <h2>Book a pharmacist near you</h2>
+        <div id="pharmacist"></div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+<script type="text/babel">
+  
+  
+ class Pharma extends React.Component {
+    constructor(props){
+    super(props);
+    this.handleSubmit = this.handleSubmit.bind(this)
+    this.state = { 
+        pharmacists: []
+    };
+  }
+
+
+ handleSubmit (event){
+        event.preventDefault();
+        let lng = this.refs.lng.value
+        let lat = this.refs.lat.value
+
+
+       
+       fetch('/api/pharmacists?lng=52.496&lat=1.8753')
+                .then(data => data.json())
+                 .then(people =>{
+                     return console.log(people)
+                 })
+                    .catch(error => console.log(error) )
+                 
+                 
+    }
+
+
+  render() {
+      let pharmacists = this.state.pharmacists
+      pharmacists = pharmacists.map((pharmacist, index) => {
+            return (
+                <li key= {index}>
+                    <span className="name">pharmacist.name</span>
+                    <span className="registration">pharmacist.number</span>
+                    <span className="availability">pharmacist.availability</span>
+                    <span className="distance">pharmacist.dist.calculated</span>
+                </li>
+            )
+      })
+    return (
+        <div>
+            <form onSubmit = {this.handleSubmit} >
+                <label>Enter Longitude of Pharmacy:</label>
+                <input type="number" step="any" ref="lng" placeholder="enter longitude here...."/><br/>
+                <label>Enter Latitide of Pharmacy:</label>
+                <input type="number" step="any" ref="lat" placeholder="enter latitude here...."/><br/>
+                <input type="submit" vaue="find pharmacists"/>
+                
+            </form>
+            <ul>{pharmacists}</ul>  
+        </div>
+        ) 
+    }
+}
+    
+ReactDOM.render(<Pharma />, document.getElementById('pharmacist'));
+</script>
